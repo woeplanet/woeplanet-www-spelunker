@@ -1,0 +1,17 @@
+{%- extends "base.html.jinja" %}
+{%- block title %}Home{%- endblock %}
+{%- block content %}
+<div class="row h-100">
+	<div id="content" class="col-sm-9 h-100">
+		<div class="page-banner">woeplanet</div>
+		<div class="page-content">
+			<p><strong>WoePlanet</strong> is a searchable and linkable index of every single WhereOnEarth (WOE) ID published.</p>
+			<p>The data is derived from the Creative Commons licensed Yahoo! GeoPlanet data dumps.</p>
+			<p><a href="{{ url_for('info', id=woeid) }}">A page for every WOEID!</a></p>
+		</div>
+		{%- include "includes/sidebar-info.html.jinja" %}
+		{%- include "includes/footer-bottom.html.jinja" %}
+	</div>
+	{%- include "includes/sidebar.html.jinja" %}
+</div>
+{%- endblock %}

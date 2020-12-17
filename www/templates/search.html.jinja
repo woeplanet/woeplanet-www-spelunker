@@ -1,0 +1,18 @@
+{%- extends "base.html.jinja" %}
+{%- block title %}{{ title }}{%- endblock %}
+{%- block content %}
+<div class="row h-100">
+    <div id="content" class="col-sm-9 h-100">
+        <div class="page-banner">search <span class="slug">this is not a geocoder</span></div>
+        <div id="search">
+            <form id="searchbox" method="post">
+                <input type="text" name="q" size="20" id="q" value="">
+                <input type="submit" value="find me" id="querysubmit" onclick="var q=document.getElementById('q');q=q.value;location.href='{{ url_for('search') }}?q='+encodeURIComponent(q);return false;">
+            </form>
+        </div>
+        {%- include "includes/sidebar-info.html.jinja" %}
+		{%- include "includes/footer-bottom.html.jinja" %}
+    </div>
+	{%- include "includes/sidebar.html.jinja" %}
+</div>
+{%- endblock %}

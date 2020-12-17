@@ -1,0 +1,10 @@
+node_modules/
+__pycache__
+src/scss/leaflet/
+www/static
+!www/static/.gitkeep
+www/run/
+!www/run/.gitkeep
+*.pem
+*.pid
+*.sock

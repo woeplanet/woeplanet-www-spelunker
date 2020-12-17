@@ -1,0 +1,28 @@
+{%- extends "base.html.jinja" %}
+{%- block title %}{{ title }}{%- endblock %}
+{%- block content %}
+<div class="row h-100">
+	<div id="content" class="col-sm-9 h-100">
+        <div class="page-banner">
+            {{ total.placetypes }} <span class="slug">Placetypes</span>
+        </div>
+        <div class="page-content">
+            <p>There are currently {{ total.docs | commafy }} places in WoePlanet{%- if includes %}&nbsp;(filtered){%- endif %}; these are their placetypes&hellip;</p>
+        </div>
+        <div id="search-results">
+            <ul id="query_results">
+                {%- for placetype in buckets %}
+                <li>{{ placetype.doc_count | commafy }} places are <a href="{{ url_for('placetype', placetype=placetype.key|lower, include=includes) }} ">{{ placetype.key | anyfy | lower }}</a></li>
+                {%- endfor %}
+            </ul>
+            <p class="again">Search again including <a href="{{ url_for('placetypes', include=['deprecated']) }} ">deprecated places</a>, <a href="{{ url_for('placetypes', include=['unknown']) }} ">unknown places</a>, places that <a href="{{ url_for('placetypes', include=['nullisland']) }} ">visit Null Island</a> or <a href="{{ url_for('placetypes', include=['deprecated','unknown','nullisland']) }} ">everything</a>?</p>
+        </div>
+        {%- include "includes/sidebar-info.html.jinja" %}
+        {%- include "includes/search-query.html.jinja" %}
+		{%- include "includes/footer-bottom.html.jinja" %}
+    </div>
+	{%- include "includes/sidebar.html.jinja" %}
+</div>
+{%- endblock %}
+
+

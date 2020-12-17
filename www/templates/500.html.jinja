@@ -1,0 +1,24 @@
+{%- extends "base.html.jinja" %}
+{%- block title %}{{ title }}{%- endblock %}
+{%- block content %}
+<div class="row">
+	<div class="w-75" id="content">
+		<div class="page-banner">{{ error.code }}<span class="slug">&nbsp;ouch</span></div>
+		<div class="page-content">
+			<div id="error">
+				<div id="error-image">
+					<a href="https://www.flickr.com/photos/paul_clarke/5097209167/" target="_blank"><img src="{{ url_for('static', filename='images/facepalm.jpg') }}" alt="#facepalm" /></a>
+				</div>
+				<div id="error-text">
+					<p>#facepalm; this was definitely not meant to happen. It's probably us, not you.</p>
+                    <p>Before it gave up hope, the spelunker said <em>{{ error.code }}&nbsp;{{ error.name }}</em></p>
+					<p><a href="{{ url_for('info', id=woeid) }}">For now, why not have a look at WOEID {{ woeid }} instead?</a></p>
+				</div>
+			</div>
+		</div>
+		{%- include "includes/sidebar-info.html.jinja" %}
+		{%- include "includes/footer.html.jinja" %}
+	</div>
+	{%- include "includes/sidebar.html.jinja" %}
+</div>
+{%- endblock %}

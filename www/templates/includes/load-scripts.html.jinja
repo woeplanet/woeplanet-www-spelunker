@@ -1,0 +1,24 @@
+{%- if map %}
+<script src="{{ url_for('static', filename='js/site.js') }}"></script>
+<script type="text/javascript">
+org.woeplanet.woeid = {{ doc['woe:id'] }};
+org.woeplanet.credits_url = '{{ url_for('credits') }}#map-credits';
+org.woeplanet.nullisland_url = '{{ url_for('static', filename='geojson/null-island.geojson') }}';
+{%- if doc['woe:scale'] %}
+org.woeplanet.scale = {{ doc['woe:scale'] }};
+{%- endif %}
+{%- if doc['woe:placetype_name'] %}
+org.woeplanet.placetype = '{{ doc['woe:placetype_name'] }}';
+{%- endif %}
+{%- if bounds %}
+org.woeplanet.bounds = {{ bounds }};
+{%- elif centroid %}
+org.woeplanet.centroid = {{ centroid }};
+org.woeplanet.zoom = 13;
+{%- endif %}
+{%- if popup %}
+org.woeplanet.popup = '{{ popup }}';
+{%- endif %}
+window.map = new org.woeplanet.map();
+</script>
+{%- endif %}

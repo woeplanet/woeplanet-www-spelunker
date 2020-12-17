@@ -1,0 +1,29 @@
+{
+  "name": "@woeplanet/woeplanet-www",
+  "version": "1.0.0",
+  "description": "The WoePlanet spelunker",
+  "main": "index.js",
+  "repository": "https://github.com/woeplanet/woeplanet-www-spelunker.git",
+  "author": "Gary Gale <gary@vicchi.org>",
+  "license": "BSD-3-Clause",
+  "dependencies": {
+    "@lodder/grunt-postcss": "^3.0.0",
+    "autoprefixer": "^10.0.2",
+    "bootstrap": "^4.5.3",
+    "grunt": "^1.3.0",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^5.0.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-openport": "^1.0.0",
+    "grunt-sass": "^3.1.0",
+    "jquery": "^3.5.1",
+    "leaflet": "^1.7.1",
+    "load-grunt-tasks": "^5.1.0",
+    "node-sass": "^5.0.0",
+    "null-island": "git+ssh://github.com/nixta/null-island.git",
+    "popper.js": "^1.16.1",
+    "postcss": "^8.1.8"
+  }
+}

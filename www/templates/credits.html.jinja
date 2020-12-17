@@ -1,0 +1,40 @@
+{%- extends "base.html.jinja" %}
+{%- block title %}{{ title }}{%- endblock %}
+{%- block content %}
+<div class="row h-100">
+	<div id="content" class="col-sm-9 h-100">
+		<div class="page-banner">credits</div>
+		<div class="page-content">
+                  <h2>People</h2>
+                  <p>Sadly, there's no data fairies living at the end of the garden and WoePlanet wouldn't be possible without the following people who cared for, fed and nurtured GeoPlanet.</p>
+                  <h3>Yahoo! Geo Technologies</h3>
+                  <p>Ali Abtoy, Walter Andrag, Eddie Babcock, Martin Barnes, Tyler Bell, Andriy Bychay,
+                  Bruce Campbell, Robert Craig, Mike Dickson, Holger Dürer, Gary Gale, Paul Grealish,
+                  Ibrahim Husseini, Jean-Marc Kuffer, Mark Law, Matt Leatham, David Lauder-Walker, Stephen May,
+                  Michael Metcalf, David Overton, David Richardson-Bunbury, Gavin Ridgeway, Soren Riise,
+                  Eugene Stipp, Rob Tyler, Bob Upham, Martin Waller, John Wright</p>
+                  <h3>Flickr</h3>
+                  <p>Aaron Straup Cope, Kellan Elliott-McCrea</p>
+                  <h3>Yahoo! Developer Network</h3>
+                  <p>Sophie Davies-Patrick, Christian Heilmann, Stacy Milman, Anil Patel</p>
+                  <h3>Yahoo! Brickhouse</h3>
+                  <p>Tom Coates, Seth Fitzsimmons, Jeannie Yang</p>
+                  <h3>Yahoo! Research</h3>
+                  <p>Ricardo Baeza-Yates, Marc Davis, Mor Naaman, Rahul Nair, Vanessa Murdock,  Roelof van Zwoll</p>
+                  <a name="map-credits"></a>
+                  <h2>Data</h2>
+                  <p>
+                  WoePlanet is licensed under <a href="https://cdla.io/permissive-1-0/">Community Data License Agreement - Permissive, Version 1.0</a> (CDLA-Permissive-1.0).
+                  </p>
+                  <p>WoePlanet contains data from Yahoo! GeoPlanet. &copy; 2009 Yahoo! Inc. Some rights reserved. Content licensed under <a href="http://creativecommons.org/licenses/by/3.0/us/">Creative Commons Attribution 3.0 United States License</a>. Provide attribution to "Yahoo! GeoPlanet".</p>
+                  <h2>Maps</h2>
+                  <p>Map tiles are <a href="http://stamen.com/">Stamen Design's</a> <a href="http://maps.stamen.com/toner/">Toner</a> and <a href="http://maps.stamen.com/toner-lite/">Toner Lite</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC-BY-3.0</a>.</p>
+                  <p>Map data is from <a href="http://openstreetmap.org/">OpenStreetMap</a>, <a href="http://creativecommons.org/licenses/by-sa/3.0">CC-BY-SA</a>, &copy; OpenStreetMap contributors.</p>
+                  <p>The Null Island map is derived from <a href="https://github.com/nixta" target="_blank">Nicholas Furness's</a> <a href="https://github.com/nixta/null-island" target="_blank">Null Island GeoJSON</a>.</p>
+		</div>
+		{%- include "includes/sidebar-info.html.jinja" %}
+		{%- include "includes/footer.html.jinja" %}
+	</div>
+	{%- include "includes/sidebar.html.jinja" %}
+</div>
+{%- endblock %}

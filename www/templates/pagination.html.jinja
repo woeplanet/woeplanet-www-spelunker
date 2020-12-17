@@ -1,0 +1,16 @@
+{%- if pagination %}
+    <div id="pagination">
+        {%- if pagination.urls.prev %}
+        <a href="{{ pagination.urls.prev }}">previous</a>
+        {%- else %}
+        <span id="pagination-first">first</span>
+        {%- endif %}
+        <span id="pagination-current">{{ pagination.page }} of {{ pagination.pages }}</span>
+        {%- if pagination.urls.next %}
+        <a href="{{ pagination.urls.next }}">next</a>
+        {%- else %}
+        <span id="pagination-last">last</span>
+        {%- endif %}
+        <div class="slug pages">(pages)</div>
+    </div>
+{%- endif %}

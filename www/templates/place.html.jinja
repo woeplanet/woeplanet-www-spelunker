@@ -1,0 +1,207 @@
+{%- extends "base.html.jinja" %}
+{%- block title %}{{ title }}{%- endblock %}
+{%- block content %}
+<div class="row h-100">
+	<div id="content" class="col-sm-9 h-100">
+		<div class="row place-entry">
+			<div class="col-sm-4 place-label label-basic">
+				Name<br/>
+				<span class="slug">in {{ lang }}</span>
+			</div>
+			<div class="col-sm-8 place-info">
+				<span id="woe-name">{{ name }}</span>
+			</div>
+		</div>
+		<div class="row place-entry">
+			<div class="col-sm-4 place-label label-basic">
+				WOEID
+			</div>
+			<div class="col-sm-8 place-info">
+			{%- if doc['woe:superseded_by'] %}
+				<a href="{{ url_for('info', id=doc['woe:id']) }}" id="woe-id-superceded">{{ doc['woe:id'] }}</a>
+				<span class="label">
+					<div class="slug"><a class="label-superseded" href="{{ url_for('info', id=doc['woe:superseded_by']) }}">this place has been superseded by WOE ID {{ doc['woe:superseded_by'] }}</a></div>
+				</span>
+			{%- else %}
+					<a href="{{ url_for('info', id=doc['woe:id']) }}" id="woe-id">{{ doc['woe:id'] }}</a>
+			{%- endif %}
+			</div>
+		</div>
+		{%- if doc['woe:supersedes'] %}
+		<div class="row place-entry">
+			<div class="col-sm-4 place-label label-supercedes">Supersedes</div>
+			<div class="col-sm-8 place-info">
+				<ul>
+				{%- for supercedes in doc['woe:supersedes'] %}
+					<li><a href="{{ url_for('info', id=supercedes) }}" id="woe-id-superceded">{{ supercedes }}</a></li>
+				{%- endfor %}
+				<ul>
+			</div>
+		</div>
+		{%- endif %}
+		<div class="row place-entry">
+			<div class="col-sm-4 place-label label-basic">Place Type</div>
+			<div class="col-sm-8 place-info">
+				<span id="woe-placetype">{{ placetype.name }}</span>
+			</div>
+		</div>
+		{%- if doc['iso:country'] %}
+		<div class="row place-entry">
+			<div class="col-sm-4 place-label label-basic">Country</div>
+			<div class="col-sm-8 place-info">
+				<span class="woe-iso">
+					<a href="{{ url_for('country', iso=doc['iso:country']) }}">{{doc['iso:country']}}</a>
+					<div class="slug"><a href="{{ url_for('country', iso=doc['iso:country']) }}" class="click-here">click here to see all the places that are part of this country</a></div>
+				</span>
+			</div>
+		</div>
+		{%- endif %}
+		{%- if doc['inflated']['hierarchy'] %}
+		<div class="row place-entry">
+			<div class="col-sm-4 place-label label-basic">Hierarchy</div>
+			<div class="col-sm-8 place-info">
+				{%- set hierarchy = doc['inflated']['hierarchy'] %}
+				<ul id="woe-hierarchy">
+					{%- if hierarchy.planet %}
+					<li><a href="{{ url_for('info', id=hierarchy.planet['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.planet['woe:name'] }}</span></a></li>
+					{%- endif %}
+					{%- if hierarchy.continent %}
+					<li><a href="{{ url_for('info', id=hierarchy.continent['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.continent['woe:name'] }}</span></a></li>
+					{%- endif %}
+					{%- if hierarchy.region %}
+					<li><a href="{{ url_for('info', id=hierarchy.region['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.region['woe:name'] }}</span></a></li>
+					{%- endif %}
+					{%- if hierarchy.country %}
+					<li><a href="{{ url_for('info', id=hierarchy.country['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.country['woe:name'] }}</span></a></li>
+					{%- endif %}
+					{%- if hierarchy.state %}
+					<li><a href="{{ url_for('info', id=hierarchy.state['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.state['woe:name'] }}</span></a></li>
+					{%- endif %}
+					{%- if hierarchy.county %}
+					<li><a href="{{ url_for('info', id=hierarchy.county['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.county['woe:name'] }}</span></a></li>
+					{%- endif %}
+					{%- if hierarchy.localadmin %}
+					<li><a href="{{ url_for('info', id=hierarchy.localadmin['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.localadmin['woe:name'] }}</span></a></li>
+					{%- endif %}
+					{%- if hierarchy.town %}
+					<li><a href="{{ url_for('info', id=hierarchy.town['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.town['woe:name'] }}</span></a></li>
+					{%- endif %}
+					{%- if hierarchy.suburb %}
+					<li><a href="{{ url_for('info', id=hierarchy.suburb['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.suburb['woe:name'] }}</span></a></li>
+					{%- endif %}
+				</ul>
+			</div>
+		</div>
+		{%- endif %}
+		{%- if doc['woe:centroid'] and doc['woe:centroid'][0] != 0.0 and doc['woe:centroid'][1] != 0.0 %}
+		<div class="row place-entry">
+			<div class="col-sm-4 place-label label-basic">
+				Centroid
+				<div class="slug">latitude, longitude</div>
+			</div>
+			<div class="col-sm-8 place-info">
+				<a href="{{ url_for('nearby_id', id=doc['woe:id']) }}"><span id="woe-centroid">{{doc['woe:centroid'][1]}}, {{doc['woe:centroid'][0]}}</span></a>
+				<div class="slug"><a href="{{ url_for('nearby_id', id=doc['woe:id']) }}" class="click-here">click here to see other nearby places</a></div>
+			</div>
+		</div>
+		{%- endif %}
+		{%- if doc['woe:bbox'] %}
+		<div class="row place-entry">
+			<div class="col-sm-4 place-label label-basic">
+				Bounding Box<div class="slug">southwest, northeast</div>
+			</div>
+			<div class="col-sm-8 place-info">
+				<div id="woe-bbox">
+					<a href="{{ url_for('map_id', id=doc['woe:id']) }}">{{doc['woe:bbox'][1]}}, {{doc['woe:bbox'][0]}}<br/>{{doc['woe:bbox'][3]}}, {{doc['woe:bbox'][2]}}</a>
+				</div>
+				<div class="slug"><a href="{{ url_for('map_id', id=doc['woe:id']) }}" class="click-here">click here to see this place on a map</a></div>
+			</div>
+		</div>
+		{%- endif %}
+		{%- if doc['inflated']['children'] %}
+		{%- for key,values in doc['inflated']['children'].items() %}
+		<div class="row place-entry">
+			<div class="col-sm-4 place-label label-children">
+				{{key}}<div class="slug">that are parented by {{ name }}</div>
+			</div>
+			<div class="col-sm-8 place-info">
+				<ul class="children">
+				{%- for place in values %}
+					<li><a href="{{ url_for('info', id=place['woe:id']) }}"><span class="woe-child-name">{{place['woe:name']}}</span></a></li>
+				{%- endfor %}
+				</ul>
+			</div>
+		</div>
+		{%- endfor %}
+		{%- endif %}
+		{%- if doc['inflated']['adjacencies'] %}
+		{%- for key,values in doc['inflated']['adjacencies'].items() %}
+		<div class="row place-entry">
+			<div class="col-sm-4 place-label label-adjacencies">
+				{{key}}<div class="slug">that are next to {{ name }}</div>
+			</div>
+			<div class="col-sm-8 place-info">
+				<ul class="adjacencies">
+				{%- for place in values %}
+					<li><a href="{{ url_for('info', id=place['woe:id']) }}"><span class="woe-adjacent-name">{{place['woe:name']}}</span></a></li>
+				{%- endfor %}
+				</ul>
+			</div>
+		</div>
+		{%- endfor %}
+		{%- endif %}
+		{%- if doc['inflated']['aliases'] %}
+		{%- for alias in doc['inflated']['aliases'] %}
+		<div class="row place-entry">
+			<div class="col-sm-4 place-label label-aliases">
+				{{ alias.lang }}<div class="slug">aliases for {{name}}</div>
+			</div>
+			<div class="col-sm-8 place-info">
+				<ul class="list_aliases">
+				{%- for name in alias.aliases %}
+					<li><a href="/search/{{name}}"><span class="woe-alias">{{name}}</span></a></li>
+				{%- endfor %}
+				</ul>
+			</div>
+		</div>
+		{%- endfor %}
+		{%- endif %}
+		{%- if doc['meta:provider'] %}
+		<div class="row place-entry">
+			<div class="col-sm-4 place-label label-source">Source</div>
+			<div class="col-sm-8 place-info">
+				<ul id="woe-providers">
+				{%- for provider in doc['meta:provider'] %}
+					<li><span id="woe-provider">{{ provider}}</span></li>
+				{%- endfor %}
+				<ul>
+			</div>
+		</div>
+		{%- endif %}
+		{%- if doc['meta:indexed'] %}
+		<div class="row place-entry">
+			<div class="col-sm-4 place-label label-source">Indexed</div>
+			<div class="col-sm-8 place-info">
+				<span id="woe-date-indexed">{{ doc['meta:indexed'] }}</span>
+			</div>
+		</div>
+		{%- endif %}
+		{%- if urls %}
+		<div class="row place-entry">
+			<div class="col-sm-4 place-label label-source">Repository</div>
+			<div class="col-sm-8 place-info">
+				<span id="woe-date-indexed"><a href="{{ urls['repo'] }}" target="_blank">{{ doc['woe:repo'] }}</a></span>
+			</div>
+		</div>
+		<div class="row place-entry">
+			<div class="col-sm-4 place-label label-source">GeoJSON</div>
+			<div class="col-sm-8 place-info">
+				<span id="woe-date-indexed"><a href="{{ urls['geojson'] }}" target="_blank">{{ urls['source'] }}</a></span>
+			</div>
+		</div>
+		{%- endif %}
+		{%- include "includes/footer.html.jinja" %}
+	</div>
+	{%- include "includes/sidebar.html.jinja" %}
+</div>
+{%- endblock %}

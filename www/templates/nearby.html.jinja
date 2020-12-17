@@ -1,0 +1,31 @@
+{%- extends "base.html.jinja" %}
+{%- block title %}{{ title }}{%- endblock %}
+{%- block content %}
+<div class="row h-100">
+	<div id="content" class="col-sm-9 h-100">
+        <div class="page-banner">nearby</div>
+        <div class="page-content">
+            <div id="location">
+                <div id="location-asking">
+                    <p>Asking the GPS things in the sky where you are; please wait a moment ...</p>
+                    </div>
+                <div id="location-success">
+                    <p>Found you! Please hold while we redirect your call ...</p>
+                </div>
+                <div id="location-error">
+                    <p>Hrmph! Unable to figure out where you are.</p>
+                    <div class="slug">
+                    The robot monkeys sadly reported:
+                        <q id="location-status">
+                        Attempt to get location failed
+                        </q>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {%- include "includes/sidebar-info.html.jinja" %}
+        {%- include "includes/footer-bottom.html.jinja" %}
+    </div>
+	{%- include "includes/sidebar.html.jinja" %}
+</div>
+{%- endblock %}

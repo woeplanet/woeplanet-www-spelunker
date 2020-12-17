@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/site.css') }}" />
+    <style type="text/css">
+    #main {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .col-sm-9, .col-sm-3 {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    </style>
+</head>
+<body>
+    <script>0</script>
+    <div id="main" class="container-fluid h-100">
+        <div class="row h-100">
+            <div class="col-sm-9 h-100">
+                <div class="page-banner h-15">test map</div>
+                <div id="main-map" class="h-85"></div>
+            </div>
+            <div class="col-sm-3 h-100">
+                <div id="side-map" class="h-100"></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script type="text/javascript">
+    var woeid = {{ doc['woe:id'] }};
+    var credits_url = '{{ url_for('credits') }}#map-credits';
+    var nullisland_url = '{{ url_for('static', filename='geojson/null-island.geojson') }}';
+    var bounds = undefined;
+    var zoom = undefined;
+    var centroid = undefined;
+{%- if bounds %}
+    bounds = {{ bounds }};
+{%- elif centroid %}
+    centroid = {{ centroid }};
+    zoom = 13;
+{%- endif %}
+{%- if popup %}
+    var var popup = '{{ popup }}';
+{%- endif %}
+    $(document).ready(function() {
+        console.log('ready fired ...');
+        var opts = {};
+        var sidemap = L.map('side-map', opts);
+        L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}', {
+            subdomains: 'abcd',
+            minZoom: 0,
+            maxZoom: 20,
+            ext: 'png'
+        }).addTo(sidemap);
+        var mainmap = L.map('main-map', opts);
+        L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}{r}.{ext}', {
+            subdomains: 'abcd',
+            minZoom: 0,
+            maxZoom: 20,
+            ext: 'png'
+        }).addTo(mainmap);
+
+        if (bounds) {
+            console.log('bounds ...');
+            sidemap.fitBounds(bounds);
+            mainmap.fitBounds(bounds);
+        }
+
+        else if (centroid) {
+            console.log('centroid ...');
+            sidemap.setView(centroid, zoom);
+            mainmap.setView(centroid, zoom);
+        }
+
+        else {
+            console.log('null island ...');
+            $.getJSON(nullisland_url, function(data) {
+                    var layer = L.geoJSON(data).addTo(sidemap);
+                    var bounds = layer.getBounds();
+                    console.log('bounds: ' + bounds.toBBoxString());
+                    var point = bounds.getCenter();
+                    console.log('point: ' + point.toString());
+                    var zoom = sidemap.getBoundsZoom(bounds, true);
+                    console.log('zoom: ' + zoom);
+                    zoom +=3;
+                    sidemap.setView(point, zoom);
+                    mainmap.setView(point, zoom);
+                });
+
+        }
+    });
+    </script>
+</body>
+</html>

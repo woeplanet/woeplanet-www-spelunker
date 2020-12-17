@@ -1,0 +1,11 @@
+{%- if es_query %}
+<div id="search-info">
+	<p>This query took {{ took }} seconds &#x231B;; <a href="#">show me the details?</a></p>
+</div>
+<div id="search-query">
+	<pre>
+        <div class="timings">{{ took }} seconds &#x231B;</div>
+{{ es_query }}
+	</pre>
+</div>
+{%- endif %}

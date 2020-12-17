@@ -1,0 +1,12 @@
+{%- extends "base.html.jinja" %}
+{%- block title %}{{ title }}{%- endblock %}
+{%- block content %}
+<div class="row h-100">
+	<div id="content" class="col-sm-9 h-100">
+		<div class="page-banner h-15">{{ name|lower }}</div>
+		<div id="main-map" class="h-85"></div>
+	</div>
+	{%- include "includes/sidebar.html.jinja" %}
+	{%- include "includes/footer-map.html.jinja" %}
+</div>
+{%- endblock %}

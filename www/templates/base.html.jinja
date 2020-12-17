@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {%- block head %}
+    <title>{% block title %}{{ title }}{% endblock %} | WoePlanet</title>
+    {%- endblock %}
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="referrer" content="origin">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    {%- block geotag %}
+    {%- if centroid %}
+    <meta name="geo.position" content="{{ centroid[1] }};{{ centroid[0]}}" />
+    {%- endif %}
+    {%- if doc and doc['iso:country'] %}
+    <meta name="geo.region" content="{{ doc['iso:country'] }}" />
+    {%- endif %}
+    {%- if doc and doc['inflated'] and doc['inflated']['name'] %}
+    <meta name="geo.placename" content="{{ doc['inflated']['name'] }}" />
+    {%- endif %}
+    {%- endblock %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/site.css') }}" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icons/favicon.ico') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}" />
+    <link rel="icon" type="image/png" sizes="180x180" href="{{ url_for('static', filename='icons/favicon-32x32.png') }}" />
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='icons/favicon-16x16.png') }}" />
+</head>
+<body>
+    <script>0</script>
+    <div id="main" class="container-fluid h-100">
+        {%- block content %}{% endblock %}
+    </div>
+    {%- include "includes/load-scripts.html.jinja" %}
+</body>
+</html>
