@@ -5,9 +5,9 @@ After=network.target
 [Service]
 User=gary
 Group=www-data
-WorkingDirectory=/home/gary/Projects/woeplanet/woeplanet-www-spelunker/www
-Environment="PATH=/home/gary/Projects/woeplanet/woeenv/bin"
-ExecStart=/home/gary/Projects/woeplanet/woeenv/bin/gunicorn --pid run/woeplanet.pid --workers 3 --bind unix:run/woeplanet.sock -m 007 woeplanet-spelunker:app
+WorkingDirectory=/var/woeplanet/woeplanet-www-spelunker/www
+Environment="PATH=/var/woeplanet/venv/bin"
+ExecStart=/var/woeplanet/venv/bin/gunicorn --pid run/woeplanet.pid --workers 3 --bind unix:run/woeplanet.sock -m 007 woeplanet-spelunker:app
 
 [Install]
 WantedBy=multi-user.target
