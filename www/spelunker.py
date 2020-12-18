@@ -4,6 +4,7 @@
 # gunicorn --pid run/woeplanet.pid --workers 3 --bind unix:run/woeplanet.sock --reload --reload-extra-file querymanager.py  --reload-extra-file static/css/site.css --reload-extra-file static/js/site.js woeplanet-spelunker:app
 
 import collections
+import dotenv
 import flask
 import flask_caching
 import inflect
@@ -19,17 +20,18 @@ import querymanager
 
 import woeplanet.utils.uri as uri
 
+dotenv.load_dotenv(dotenv.find_dotenv())
+
 app = flask.Flask(__name__)
 cache = flask_caching.Cache(
     config={
         'CACHE_TYPE': 'filesystem',
         'CACHE_DEFAULT_TIMEOUT': 5,
         'CACHE_IGNORE_ERRORS': False,
-        'CACHE_DIR':
-        '/home/gary/Projects/woeplanet/woeplanet-www-spelunker/www/run/cache/',
+        'CACHE_DIR': os.environ.get('WOE_CACHE_DIR'),
         'CACHE_THRESHOLD': 500,
         'CACHE_OPTIONS': {
-            'mode': 755
+            'mode': int(os.environ.get('WOE_CACHE_MASK'))
         }
     })
 cache.init_app(app)
@@ -118,10 +120,10 @@ def internal_server_error(error):
 
 @app.before_request
 def init():
-    es_host = os.environ.get('WOEPLANET_ES_HOST', 'localhost')
-    es_port = os.environ.get('WOEPLANET_ES_PORT', '9200')
-    es_docidx = os.environ.get('WOEPLANET_ES_DOC_INDEX', 'woeplanet')
-    es_ptidx = os.environ.get('WOEPLANET_ES_PTYPE_INDEX', 'placetypes')
+    es_host = os.environ.get('WOE_ES_HOST', 'localhost')
+    es_port = os.environ.get('WOE_ES_PORT', '9200')
+    es_docidx = os.environ.get('WOE_ES_DOC_INDEX', 'woeplanet')
+    es_ptidx = os.environ.get('WOE_ES_PT_INDEX', 'placetypes')
 
     flask.g.docidx = es_docidx
     flask.g.ptidx = es_ptidx
@@ -925,13 +927,6 @@ def search():
                 'placetypes': True,
                 'countries': False
             }
-            # 'source': [
-            #     'woe:id', 'woe:name', 'woe:placetype',
-            #     'woe:placetype_name', 'iso:country', 'woe:hierarchy',
-            #     'woe:min_latitude', 'woe:max_latitude',
-            #     'woe:min_longitude', 'woe:max_longitude', 'woe:latitude',
-            #     'woe:longitude'
-            # ]
         }
         placetype = get_str('placetype')
         placetype = get_single(placetype)
@@ -969,7 +964,6 @@ def search():
                 }
 
                 _query, _params, res = do_search(**params)
-                # res = flask.g.docmgr.single_rsp(res, **params)
                 if res['ok']:
                     args = {'name': True}
                     sidebar_woeid = int(res['rows'][0]['woe:id'])
