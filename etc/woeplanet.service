@@ -3,7 +3,7 @@ Description=Gunicorn instance to service the WoePlanet spelunker
 After=network.target
 
 [Service]
-User=gary
+User=ubuntu
 Group=www-data
 WorkingDirectory=/var/woeplanet/woeplanet-www-spelunker/www
 Environment="PATH=/var/woeplanet/venv/bin"
