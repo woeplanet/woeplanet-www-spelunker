@@ -873,7 +873,6 @@ def placetype(placetype):
     flask.abort(404)
 
 @app.route('/random/', methods=['GET'])
-@cache.cached(timeout=60)
 def random_id():
     params = {
         'size': 1,
