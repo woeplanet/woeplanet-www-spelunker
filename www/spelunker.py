@@ -1743,7 +1743,7 @@ def make_source_urls(doc):
 
     repo_url = 'https://github.com/woeplanet-data/%s' % doc['woe:repo']
     file_path = uri.id2abspath('/', doc['woe:id'])
-    geojson_url = uri.id2abspath(('%s/data' % repo_url), doc['woe:id'])
+    geojson_url = uri.id2abspath(('%s/blob/master/data' % repo_url), doc['woe:id'])
 
     return {
         'source': file_path,
