@@ -570,7 +570,7 @@ def place_map_page(woeid):
     }
     doc = inflatify(doc, **args)
 
-    url = flask.url_for('place_page', woewoeid=id)
+    url = flask.url_for('place_page', woeid=woeid)
     name = doc['woe:name']
     popup = f'<h2>This is <a href="{url}">{name}</a></h2>'
 
