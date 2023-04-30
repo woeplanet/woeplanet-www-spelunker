@@ -1,0 +1,5 @@
+cluster.name: "woeplanet-cluster"
+network.host: 0.0.0.0
+path:
+  repo:
+    - /mnt/elasticsearch/snapshots

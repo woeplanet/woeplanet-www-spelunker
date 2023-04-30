@@ -1,0 +1,48 @@
+services:
+  spelunker:
+    image: ghcr.io/woeplanet/spelunker:${RELEASE_TAG:-latest}
+    platform: linux/amd64
+    networks:
+      - woeplanet-backend
+    restart: unless-stopped
+    depends_on:
+      - elasticsearch
+    env_file:
+      - ./.env
+    volumes:
+      - ./.env:/service/.env
+      - ./gunicorn.conf.py:/service/gunicorn.conf.py
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.woeplanet-spelunker.rule=Host(`${SPELUNKER_SERVICE_HOST:?Spelunker host not defined}`)
+      - traefik.http.routers.woeplanet-spelunker.entrypoints=websecure
+      - traefik.http.routers.woeplanet-spelunker.tls.certresolver=reverse-proxy
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_TAG:-latest}
+    networks:
+      - woeplanet-backend
+    expose:
+      - 9200
+    restart: unless-stopped
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
+    volumes:
+      - ./data-stores/elasticsearch/data:/usr/share/elasticsearch/data
+      - ./data-stores/elasticsearch/logs:/usr/share/elasticsearch/logs
+      - ./data-stores/elasticsearch/snapshots:/mnt/elasticsearch/snapshots
+      - ./etc/elasticsearch/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    environment:
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+
+networks:
+  refdata-backend:
+    external: true

@@ -1,0 +1,10 @@
+# Ignore everything by default
+**
+
+# Now add what we want explicitly
+!/spelunker/**
+!/templates/**
+!/VERSION
+!/static/**
+!/gunicorn.conf.py
+!/requirements.txt

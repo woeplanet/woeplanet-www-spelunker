@@ -227,6 +227,18 @@ def home_page():
     return None, None
 
 
+@app.route('/up', methods=['GET'])
+def health_check():
+    """
+    Health check endpoint
+    """
+
+    return {
+        'status': 200,
+        'message': 'OK'
+    }
+
+
 @app.route('/about/', methods=['GET'])
 def about_page():
     """
