@@ -1,13 +1,13 @@
 /* jshint -W069 */
 
-sass = require('node-sass');
+sass = require('sass');
 module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         dirs: {
-            static: 'www/static/'
+            static: 'static/'
         },
         clean: {
             dist: ['<%= dirs.static %>/']
