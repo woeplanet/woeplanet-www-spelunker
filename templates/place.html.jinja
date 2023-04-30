@@ -18,12 +18,12 @@
 			</div>
 			<div class="col-sm-8 place-info">
 			{%- if doc['woe:superseded_by'] %}
-				<a href="{{ url_for('info', id=doc['woe:id']) }}" id="woe-id-superceded">{{ doc['woe:id'] }}</a>
+				<a href="{{ url_for('place_page', woeid=doc['woe:id']) }}" woeid="woe-id-superceded">{{ doc['woe:id'] }}</a>
 				<span class="label">
-					<div class="slug"><a class="label-superseded" href="{{ url_for('info', id=doc['woe:superseded_by']) }}">this place has been superseded by WOE ID {{ doc['woe:superseded_by'] }}</a></div>
+					<div class="slug"><a class="label-superseded" href="{{ url_for('place_page', woeid=doc['woe:superseded_by']) }}">this place has been superseded by WOE ID {{ doc['woe:superseded_by'] }}</a></div>
 				</span>
 			{%- else %}
-					<a href="{{ url_for('info', id=doc['woe:id']) }}" id="woe-id">{{ doc['woe:id'] }}</a>
+					<a href="{{ url_for('place_page', woeid=doc['woe:id']) }}" woeid="woe-id">{{ doc['woe:id'] }}</a>
 			{%- endif %}
 			</div>
 		</div>
@@ -33,7 +33,7 @@
 			<div class="col-sm-8 place-info">
 				<ul>
 				{%- for supercedes in doc['woe:supersedes'] %}
-					<li><a href="{{ url_for('info', id=supercedes) }}" id="woe-id-superceded">{{ supercedes }}</a></li>
+					<li><a href="{{ url_for('place_page', woeid=supercedes) }}" woeid="woe-id-superceded">{{ supercedes }}</a></li>
 				{%- endfor %}
 				<ul>
 			</div>
@@ -50,8 +50,8 @@
 			<div class="col-sm-4 place-label label-basic">Country</div>
 			<div class="col-sm-8 place-info">
 				<span class="woe-iso">
-					<a href="{{ url_for('country', iso=doc['iso:country']) }}">{{doc['iso:country']}}</a>
-					<div class="slug"><a href="{{ url_for('country', iso=doc['iso:country']) }}" class="click-here">click here to see all the places that are part of this country</a></div>
+					<a href="{{ url_for('country_page', iso=doc['iso:country']) }}">{{doc['iso:country']}}</a>
+					<div class="slug"><a href="{{ url_for('country_page', iso=doc['iso:country']) }}" class="click-here">click here to see all the places that are part of this country</a></div>
 				</span>
 			</div>
 		</div>
@@ -63,31 +63,31 @@
 				{%- set hierarchy = doc['inflated']['hierarchy'] %}
 				<ul id="woe-hierarchy">
 					{%- if hierarchy.planet %}
-					<li><a href="{{ url_for('info', id=hierarchy.planet['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.planet['woe:name'] }}</span></a></li>
+					<li><a href="{{ url_for('place_page', woeid=hierarchy.planet['woe:id']) }}"><span class="woe-ancestor" woeid="woe-supername">{{ hierarchy.planet['woe:name'] }}</span></a></li>
 					{%- endif %}
 					{%- if hierarchy.continent %}
-					<li><a href="{{ url_for('info', id=hierarchy.continent['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.continent['woe:name'] }}</span></a></li>
+					<li><a href="{{ url_for('place_page', woeid=hierarchy.continent['woe:id']) }}"><span class="woe-ancestor" woeid="woe-supername">{{ hierarchy.continent['woe:name'] }}</span></a></li>
 					{%- endif %}
 					{%- if hierarchy.region %}
-					<li><a href="{{ url_for('info', id=hierarchy.region['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.region['woe:name'] }}</span></a></li>
+					<li><a href="{{ url_for('place_page', woeid=hierarchy.region['woe:id']) }}"><span class="woe-ancestor" woeid="woe-supername">{{ hierarchy.region['woe:name'] }}</span></a></li>
 					{%- endif %}
 					{%- if hierarchy.country %}
-					<li><a href="{{ url_for('info', id=hierarchy.country['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.country['woe:name'] }}</span></a></li>
+					<li><a href="{{ url_for('place_page', woeid=hierarchy.country['woe:id']) }}"><span class="woe-ancestor" woeid="woe-supername">{{ hierarchy.country['woe:name'] }}</span></a></li>
 					{%- endif %}
 					{%- if hierarchy.state %}
-					<li><a href="{{ url_for('info', id=hierarchy.state['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.state['woe:name'] }}</span></a></li>
+					<li><a href="{{ url_for('place_page', woeid=hierarchy.state['woe:id']) }}"><span class="woe-ancestor" woeid="woe-supername">{{ hierarchy.state['woe:name'] }}</span></a></li>
 					{%- endif %}
 					{%- if hierarchy.county %}
-					<li><a href="{{ url_for('info', id=hierarchy.county['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.county['woe:name'] }}</span></a></li>
+					<li><a href="{{ url_for('place_page', woeid=hierarchy.county['woe:id']) }}"><span class="woe-ancestor" woeid="woe-supername">{{ hierarchy.county['woe:name'] }}</span></a></li>
 					{%- endif %}
 					{%- if hierarchy.localadmin %}
-					<li><a href="{{ url_for('info', id=hierarchy.localadmin['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.localadmin['woe:name'] }}</span></a></li>
+					<li><a href="{{ url_for('place_page', woeid=hierarchy.localadmin['woe:id']) }}"><span class="woe-ancestor" woeid="woe-supername">{{ hierarchy.localadmin['woe:name'] }}</span></a></li>
 					{%- endif %}
 					{%- if hierarchy.town %}
-					<li><a href="{{ url_for('info', id=hierarchy.town['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.town['woe:name'] }}</span></a></li>
+					<li><a href="{{ url_for('place_page', woeid=hierarchy.town['woe:id']) }}"><span class="woe-ancestor" woeid="woe-supername">{{ hierarchy.town['woe:name'] }}</span></a></li>
 					{%- endif %}
 					{%- if hierarchy.suburb %}
-					<li><a href="{{ url_for('info', id=hierarchy.suburb['woe:id']) }}"><span class="woe-ancestor" id="woe-supername">{{ hierarchy.suburb['woe:name'] }}</span></a></li>
+					<li><a href="{{ url_for('place_page', woeid=hierarchy.suburb['woe:id']) }}"><span class="woe-ancestor" woeid="woe-supername">{{ hierarchy.suburb['woe:name'] }}</span></a></li>
 					{%- endif %}
 				</ul>
 			</div>
@@ -100,8 +100,8 @@
 				<div class="slug">latitude, longitude</div>
 			</div>
 			<div class="col-sm-8 place-info">
-				<a href="{{ url_for('nearby_id', id=doc['woe:id']) }}"><span id="woe-centroid">{{doc['woe:centroid'][1]}}, {{doc['woe:centroid'][0]}}</span></a>
-				<div class="slug"><a href="{{ url_for('nearby_id', id=doc['woe:id']) }}" class="click-here">click here to see other nearby places</a></div>
+				<a href="{{ url_for('nearby_id_page', woeid=doc['woe:id']) }}"><span woeid="woe-centroid">{{doc['woe:centroid'][1]}}, {{doc['woe:centroid'][0]}}</span></a>
+				<div class="slug"><a href="{{ url_for('nearby_id_page', woeid=doc['woe:id']) }}" class="click-here">click here to see other nearby places</a></div>
 			</div>
 		</div>
 		{%- endif %}
@@ -111,10 +111,10 @@
 				Bounding Box<div class="slug">southwest, northeast</div>
 			</div>
 			<div class="col-sm-8 place-info">
-				<div id="woe-bbox">
-					<a href="{{ url_for('map_id', id=doc['woe:id']) }}">{{doc['woe:bbox'][1]}}, {{doc['woe:bbox'][0]}}<br/>{{doc['woe:bbox'][3]}}, {{doc['woe:bbox'][2]}}</a>
+				<div woeid="woe-bbox">
+					<a href="{{ url_for('place_map_page', woeid=doc['woe:id']) }}">{{doc['woe:bbox'][1]}}, {{doc['woe:bbox'][0]}}<br/>{{doc['woe:bbox'][3]}}, {{doc['woe:bbox'][2]}}</a>
 				</div>
-				<div class="slug"><a href="{{ url_for('map_id', id=doc['woe:id']) }}" class="click-here">click here to see this place on a map</a></div>
+				<div class="slug"><a href="{{ url_for('place_map_page', woeid=doc['woe:id']) }}" class="click-here">click here to see this place on a map</a></div>
 			</div>
 		</div>
 		{%- endif %}
@@ -127,7 +127,7 @@
 			<div class="col-sm-8 place-info">
 				<ul class="children">
 				{%- for place in values %}
-					<li><a href="{{ url_for('info', id=place['woe:id']) }}"><span class="woe-child-name">{{place['woe:name']}}</span></a></li>
+					<li><a href="{{ url_for('place_page', woeid=place['woe:id']) }}"><span class="woe-child-name">{{place['woe:name']}}</span></a></li>
 				{%- endfor %}
 				</ul>
 			</div>
@@ -143,7 +143,7 @@
 			<div class="col-sm-8 place-info">
 				<ul class="adjacencies">
 				{%- for place in values %}
-					<li><a href="{{ url_for('info', id=place['woe:id']) }}"><span class="woe-adjacent-name">{{place['woe:name']}}</span></a></li>
+					<li><a href="{{ url_for('place_page', woeid=place['woe:id']) }}"><span class="woe-adjacent-name">{{place['woe:name']}}</span></a></li>
 				{%- endfor %}
 				</ul>
 			</div>

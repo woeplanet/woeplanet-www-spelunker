@@ -30,7 +30,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script type="text/javascript">
     var woeid = {{ doc['woe:id'] }};
-    var credits_url = '{{ url_for('credits') }}#map-credits';
+    var credits_url = '{{ url_for('credits_page') }}#map-credits';
     var nullisland_url = '{{ url_for('static', filename='geojson/null-island.geojson') }}';
     var bounds = undefined;
     var zoom = undefined;

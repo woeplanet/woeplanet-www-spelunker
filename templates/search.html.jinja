@@ -7,7 +7,7 @@
         <div id="search">
             <form id="searchbox" method="post">
                 <input type="text" name="q" size="20" id="q" value="">
-                <input type="submit" value="find me" id="querysubmit" onclick="var q=document.getElementById('q');q=q.value;location.href='{{ url_for('search') }}?q='+encodeURIComponent(q);return false;">
+                <input type="submit" value="find me" id="querysubmit" onclick="var q=document.getElementById('q');q=q.value;location.href='{{ url_for('search_page') }}?q='+encodeURIComponent(q);return false;">
             </form>
         </div>
         {%- include "includes/sidebar-info.html.jinja" %}

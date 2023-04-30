@@ -12,10 +12,10 @@
         <div id="search-results">
             <ul id="query_results">
                 {%- for placetype in buckets %}
-                <li>{{ placetype.doc_count | commafy }} places are <a href="{{ url_for('placetype', placetype=placetype.key|lower, include=includes) }} ">{{ placetype.key | anyfy | lower }}</a></li>
+                <li>{{ placetype.doc_count | commafy }} places are <a href="{{ url_for('placetype_page', placetype_name=placetype.key|lower, include=includes) }} ">{{ placetype.key | anyfy | lower }}</a></li>
                 {%- endfor %}
             </ul>
-            <p class="again">Search again including <a href="{{ url_for('placetypes', include=['deprecated']) }} ">deprecated places</a>, <a href="{{ url_for('placetypes', include=['unknown']) }} ">unknown places</a>, places that <a href="{{ url_for('placetypes', include=['nullisland']) }} ">visit Null Island</a> or <a href="{{ url_for('placetypes', include=['deprecated','unknown','nullisland']) }} ">everything</a>?</p>
+            <p class="again">Search again including <a href="{{ url_for('placetypes_page', include=['deprecated']) }} ">deprecated places</a>, <a href="{{ url_for('placetypes_page', include=['unknown']) }} ">unknown places</a>, places that <a href="{{ url_for('placetypes_page', include=['nullisland_page']) }} ">visit Null Island</a> or <a href="{{ url_for('placetypes_page', include=['deprecated','unknown','nullisland_page']) }} ">everything</a>?</p>
         </div>
         {%- include "includes/sidebar-info.html.jinja" %}
         {%- include "includes/search-query.html.jinja" %}

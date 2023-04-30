@@ -7,8 +7,8 @@
             {{ pagination.total|commafy }}
             {%- if query is defined %}
             <span class="slug">
-                results for <q id="search-name"><a href="{{ url_for('search', q=query|urlencode) }}">{{ query }}</a></q>
-                <a class="search-again" href="{{ url_for('search') }}">/ search again</a>
+                results for <q id="search-name"><a href="{{ url_for('search_page', q=query|urlencode) }}">{{ query }}</a></q>
+                <a class="search-again" href="{{ url_for('search_page') }}">/ search again</a>
             </span>
             {%- elif iso is defined %}
             <span class="slug">results for "{{ iso|upper }}"</span>
@@ -38,15 +38,15 @@
                 <ul>
                 {%- for facet in facets.placetypes.buckets %}
                     {%- if query is defined %}
-                    <li>{{ facet.doc_count|commafy }} <a href="{{ url_for('search', q=query|urlencode, placetype=facet.key|lower) }}">{{ facet.key|lower|pluralise(facet.doc_count) }}</a></li>
+                    <li>{{ facet.doc_count|commafy }} <a href="{{ url_for('search_page', q=query|urlencode, placetype=facet.key|lower) }}">{{ facet.key|lower|pluralise(facet.doc_count) }}</a></li>
                     {%- elif iso is defined %}
-                    <li>{{ facet.doc_count|commafy }} <a href="{{ url_for('country', iso=iso, placetype=facet.key|lower) }}">{{ facet.key|lower|pluralise(facet.doc_count) }}</a></li>
+                    <li>{{ facet.doc_count|commafy }} <a href="{{ url_for('country_page', iso=iso, placetype=facet.key|lower) }}">{{ facet.key|lower|pluralise(facet.doc_count) }}</a></li>
                     {%- elif nearby_lat is defined  and nearby_lng is defined %}
-                    <li>{{ facet.doc_count|commafy }} <a href="{{ url_for('nearby', lat=nearby_lat, lng=nearby_lng, placetype=facet.key|lower) }}">{{ facet.key|lower|pluralise(facet.doc_count) }}</a></li>
+                    <li>{{ facet.doc_count|commafy }} <a href="{{ url_for('nearby_page', lat=nearby_lat, lng=nearby_lng, placetype=facet.key|lower) }}">{{ facet.key|lower|pluralise(facet.doc_count) }}</a></li>
                     {%- elif nearby_id is defined %}
-                    <li>{{ facet.doc_count|commafy }} <a href="{{ url_for('nearby_id', id=nearby_id, placetype=facet.key|lower) }}">{{ facet.key|lower|pluralise(facet.doc_count) }}</a></li>
+                    <li>{{ facet.doc_count|commafy }} <a href="{{ url_for('nearby_id_page', woeid=nearby_id, placetype=facet.key|lower) }}">{{ facet.key|lower|pluralise(facet.doc_count) }}</a></li>
                     {%- elif nullisland is defined %}
-                    <li>{{ facet.doc_count|commafy }} <a href="{{ url_for('nullisland', placetype=facet.key|lower) }}">{{ facet.key|lower|pluralise(facet.doc_count) }}</a></li>
+                    <li>{{ facet.doc_count|commafy }} <a href="{{ url_for('nullisland_page', placetype=facet.key|lower) }}">{{ facet.key|lower|pluralise(facet.doc_count) }}</a></li>
                     {%- endif %}
                 {%- endfor %}
                 </ul>
@@ -57,12 +57,12 @@
             <ol id="query_results" start="{{ pagination.start }}">
             {%- for doc in results %}
                 <li>
-                    <a href="{{ url_for('info', id=doc['woe:id']) }}">{{ doc['woe:name'] }}</a>
+                    <a href="{{ url_for('place_page', woeid=doc['woe:id']) }}">{{ doc['woe:name'] }}</a>
                     <div class="slug">{{ doc['inflated']['name'] }} ({{ doc['woe:placetype_name'] }})</div>
                 </li>
             {%- endfor %}
             </ol>
-            <p class="again">Search again including <a href="{{ url_for('countries', include=['deprecated']) }} ">deprecated places</a>, <a href="{{ url_for('countries', include=['unknown']) }} ">unknown places</a>, places that <a href="{{ url_for('countries', include=['nullisland']) }} ">visit Null Island</a> or <a href="{{ url_for('countries', include=['deprecated','unknown','nullisland']) }} ">everything</a>?</p>
+            <p class="again">Search again including <a href="{{ url_for('countries_page', include=['deprecated']) }} ">deprecated places</a>, <a href="{{ url_for('countries_page', include=['unknown']) }} ">unknown places</a>, places that <a href="{{ url_for('countries_page', include=['nullisland_page']) }} ">visit Null Island</a> or <a href="{{ url_for('countries_page', include=['deprecated','unknown','nullisland_page']) }} ">everything</a>?</p>
             {%- include "pagination.html.jinja" %}
             {%- else %}
             <p>&#x1F622;; nothing found ...</p>

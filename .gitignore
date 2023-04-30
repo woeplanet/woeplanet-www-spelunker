@@ -7,3 +7,6 @@ www/run/
 *.pid
 *.sock
 .env
+.direnv/
+./data-stores/
+!./data-stores/.gitkeep

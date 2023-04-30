@@ -5,13 +5,13 @@
 	<div id="content" class="col-sm-9 h-100">
 		<div class="page-banner">about</div>
 		<div class="page-content">
-			<p><a href="{{ url_for('info', id=woeid) }}">A page for every WOEID</a>.</p>
-			<p><a href="{{ url_for('country', iso=iso) }}">A page for every country</a> <span class="slug">(and their <a href="{{ url_for('country', iso=iso, placetype='airport') }}">airports</a>)</span>.</p>
-			<p><a href="{{ url_for('placetypes') }}">A page for every placetype</a>.</p>
-			<p><a href="{{ url_for('map_id', id=woeid) }}">A map for every WOEID</a>.</p>
-			<p><a href="{{ url_for('search', q=name) }}">Search</a>.</p>
-			<p><a href="{{ url_for('nearby_id', id=nearby) }}">Search nearby</a> <span class="slug">(and <a href="{{ url_for('nearby') }}">nearby-er still</a>)</span>.</p>
-			<p><a href="{{ url_for('random_id') }}">Surprises</a>.</p>
+			<p><a href="{{ url_for('place_page', woeid=woeid) }}">A page for every WOEID</a>.</p>
+			<p><a href="{{ url_for('country_page', iso=iso) }}">A page for every country</a> <span class="slug">(and their <a href="{{ url_for('country_page', iso=iso, placetype='airport') }}">airports</a>)</span>.</p>
+			<p><a href="{{ url_for('placetypes_page') }}">A page for every placetype</a>.</p>
+			<p><a href="{{ url_for('place_map_page', woeid=woeid) }}">A map for every WOEID</a>.</p>
+			<p><a href="{{ url_for('search_page', q=name) }}">Search</a>.</p>
+			<p><a href="{{ url_for('nearby_id_page', woeid=nearby) }}">Search nearby</a> <span class="slug">(and <a href="{{ url_for('nearby_page') }}">nearby-er still</a>)</span>.</p>
+			<p><a href="{{ url_for('random_page') }}">Surprises</a>.</p>
 			<p><a href="https://www.aaronland.info/weblog/2010/04/05/milkshake/#woedb" target="_blank">A blog post</a>.</p>
 			<p><a href="https://thegeomob.com/podcast/episode-37" target="_blank">A podcast</a>.</p>
 			<h3>The Short Version</h3>

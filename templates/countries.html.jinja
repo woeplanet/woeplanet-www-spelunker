@@ -12,10 +12,10 @@
         <div id="search-results">
             <ul id="query_results">
                 {%- for country in buckets %}
-                <li>{{ country.doc_count | commafy }} places are in <a href="{{ url_for('country', iso=country.key|upper, include=includes)}} ">{{ country.key }}&nbsp;({{ country.name }})</a></li>
+                <li>{{ country.doc_count | commafy }} places are in <a href="{{ url_for('country_page', iso=country.key|upper, include=includes)}} ">{{ country.key }}&nbsp;({{ country.name }})</a></li>
                 {%- endfor %}
             </ul>
-            <p class="again">Search again including <a href="{{ url_for('countries', include=['deprecated']) }} ">deprecated places</a>, <a href="{{ url_for('countries', include=['unknown']) }} ">unknown places</a>, places that <a href="{{ url_for('countries', include=['nullisland']) }} ">visit Null Island</a> or <a href="{{ url_for('countries', include=['deprecated','unknown','nullisland']) }} ">everything</a>?</p>
+            <p class="again">Search again including <a href="{{ url_for('countries_page', include=['deprecated']) }} ">deprecated places</a>, <a href="{{ url_for('countries_page', include=['unknown']) }} ">unknown places</a>, places that <a href="{{ url_for('countries_page', include=['nullisland_page']) }} ">visit Null Island</a> or <a href="{{ url_for('countries_page', include=['deprecated','unknown','nullisland_page']) }} ">everything</a>?</p>
         </div>
         {%- include "includes/sidebar-info.html.jinja" %}
         {%- include "includes/search-query.html.jinja" %}

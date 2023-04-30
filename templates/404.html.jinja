@@ -11,7 +11,7 @@
 				</div>
 				<div id="error-text">
 					<p>Well this is all a bit embarassing ... we can't seem to find that page.</p>
-					<p><a href="{{ url_for('info', id=woeid) }}">Why not try WOEID {{ woeid }} instead?</a></p>
+					<p><a href="{{ url_for('place_page', woeid=woeid) }}">Why not try WOEID {{ woeid }} instead?</a></p>
 				</div>
 			</div>
 		</div>
