@@ -47,8 +47,7 @@ if (!org.woeplanet.map) {
                 touchZoom: false
             };
             this.maps.side = L.map(this.ids.side, options);
-            L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.{ext}', {
-                subdomains: 'abcd',
+            L.tileLayer('https://tiles.stadiamaps.com/tiles/stamen_toner/{z}/{x}/{y}{r}.{ext}', {
                 minZoom: 0,
                 maxZoom: 20,
                 ext: 'png'
