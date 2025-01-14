@@ -27,6 +27,17 @@ module.exports = function(grunt) {
             }
         },
         copy: {
+            robots: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'src/robots',
+                        src: ['**/*'],
+                        dest: '<%= dirs.static %>/'
+
+                    }
+                ]
+            },
             images: {
                 files: [
                     {

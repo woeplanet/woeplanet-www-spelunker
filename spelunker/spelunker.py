@@ -20,15 +20,42 @@ import flask
 import flask_caching
 import inflect
 import iso639
+import werkzeug.wrappers
 
 from woeplanet.utils import uri
 
 from spelunker.querymanager import QueryManager
 
+DEFAULT_SIDEBAR_WOEID = 44418
+DEFAULT_SIDEBAR_NAME = 'London'
+
+AGENTS = ['meta-externalagent', 'bytespider']
+
+
+class BotBlockerMiddleware:  # pylint: disable=too-few-public-methods
+    """
+    Simple AI bot blocker WSGI middleware
+    """
+
+    def __init__(self, app_instance):
+        self.app = app_instance
+
+    def __call__(self, environ, start_response):
+        request = werkzeug.wrappers.Request(environ)
+        user_agent = request.user_agent.string.lower()
+        if any(agent in user_agent for agent in AGENTS):
+            logger.info('** Bot Blocker ** blocked User-Agent %s', request.user_agent.string)  # pylint: disable=possibly-used-before-assignment
+            rsp = werkzeug.wrappers.Response('Forbidden', mimetype='text/plain', status=403)
+            return rsp(environ, start_response)
+
+        return self.app(environ, start_response)
+
+
 dotenv.load_dotenv(dotenv.find_dotenv())
 template_dir = os.path.abspath('./templates')
 static_dir = os.path.abspath('./static')
 app = flask.Flask(__name__, template_folder=template_dir, static_folder=static_dir)
+app.wsgi_app = BotBlockerMiddleware(app.wsgi_app)
 
 if __name__ != '__main__':
     logger = logging.getLogger('gunicorn.error')
@@ -87,9 +114,7 @@ def page_not_found(error):
             'centroid': True
         },
         'exclude': {
-            'placetypes': [0,
-                           11,
-                           25],
+            'placetypes': [0, 11, 25],
             'nullisland': True,
             'deprecated': True
         }
@@ -130,9 +155,7 @@ def internal_server_error(error):
             'centroid': True
         },
         'exclude': {
-            'placetypes': [0,
-                           11,
-                           25],
+            'placetypes': [0, 11, 25],
             'nullisland': True,
             'deprecated': True
         }
@@ -197,9 +220,7 @@ def home_page():
             'centroid': True
         },
         'exclude': {
-            'placetypes': [0,
-                           11,
-                           25],
+            'placetypes': [0, 11, 25],
             'nullisland': True,
             'deprecated': True
         }
@@ -227,6 +248,15 @@ def home_page():
     return None, None
 
 
+@app.route('/robots.txt')
+def serve_robots():
+    """
+    Return static robots.txt
+    """
+
+    return flask.send_from_directory(app.static_folder, flask.request.path[1:])
+
+
 @app.route('/up', methods=['GET'])
 def health_check():
     """
@@ -252,9 +282,7 @@ def about_page():
             'centroid': True
         },
         'exclude': {
-            'placetypes': [0,
-                           11,
-                           25],
+            'placetypes': [0, 11, 25],
             'nullisland': True,
             'deprecated': True
         },
@@ -290,8 +318,7 @@ def about_page():
             'map': True,
             'title': 'About',
             'woeid': doc['woe:id'],
-            'iso': doc.get('iso:country',
-                           'GB'),
+            'iso': doc.get('iso:country', 'GB'),
             'nearby': doc['woe:id'],
             'name': name,
             'doc': doc
@@ -316,9 +343,7 @@ def credits_page():
             'centroid': True
         },
         'exclude': {
-            'placetypes': [0,
-                           11,
-                           25],
+            'placetypes': [0, 11, 25],
             'nullisland': True,
             'deprecated': True
         }
@@ -375,8 +400,7 @@ def countries_page():
                 },
                 'exclude': excludes,
                 'source': {
-                    'includes': ['woe:name',
-                                 'iso:country']
+                    'includes': ['woe:name', 'iso:country']
                 }
             }
             _query, _params, rsp = do_search(**params)
@@ -395,9 +419,7 @@ def countries_page():
                 'centroid': True
             },
             'exclude': {
-                'placetypes': [0,
-                               11,
-                               25],
+                'placetypes': [0, 11, 25],
                 'nullisland': True,
                 'deprecated': True
             }
@@ -437,12 +459,15 @@ def country_page(iso):
     Page handler: country by ISO code page
     """
 
+    sidebar_woeid = DEFAULT_SIDEBAR_WOEID
+    sidebar_name = DEFAULT_SIDEBAR_NAME
+    doc = {}
+
     iso = iso.upper()
     params = {
         'iso': iso,
         'exclude': {
-            'placetype': [0,
-                          12],
+            'placetype': [0, 12],
             'nullisland': True,
             'deprecated': True
         },
@@ -481,9 +506,7 @@ def country_page(iso):
                 'centroid': True
             },
             'exclude': {
-                'placetypes': [0,
-                               11,
-                               25],
+                'placetypes': [0, 11, 25],
                 'nullisland': True,
                 'deprecated': True
             }
@@ -595,6 +618,10 @@ def nearby_id_page(woeid):
     Nearby place page handler
     """
 
+    sidebar_woeid = DEFAULT_SIDEBAR_WOEID
+    sidebar_name = DEFAULT_SIDEBAR_NAME
+    doc = {}
+
     _query, doc = get_by_id(woeid)
     if not doc:
         flask.abort(404)
@@ -623,9 +650,7 @@ def nearby_id_page(woeid):
             'coordinates': coords
         },
         'exclude': {
-            'placetypes': [0,
-                           11,
-                           25],
+            'placetypes': [0, 11, 25],
             'nullisland': True,
             'deprecated': True
         },
@@ -666,9 +691,7 @@ def nearby_id_page(woeid):
                 'centroid': True
             },
             'exclude': {
-                'placetypes': [0,
-                               11,
-                               25],
+                'placetypes': [0, 11, 25],
                 'nullisland': True,
                 'deprecated': True
             }
@@ -710,6 +733,10 @@ def nearby_page():
     Nearby places page handler
     """
 
+    sidebar_woeid = DEFAULT_SIDEBAR_WOEID
+    sidebar_name = DEFAULT_SIDEBAR_NAME
+    doc = {}
+
     lat = get_float('lat')
     lat = get_single(lat)
     lng = get_float('lng')
@@ -728,9 +755,7 @@ def nearby_page():
                 'coordinates': coords
             },
             'exclude': {
-                'placetypes': [0,
-                               11,
-                               25],
+                'placetypes': [0, 11, 25],
                 'nullisland': True,
                 'deprecated': True
             },
@@ -769,9 +794,7 @@ def nearby_page():
                         'centroid': True
                     },
                     'exclude': {
-                        'placetypes': [0,
-                                       11,
-                                       25],
+                        'placetypes': [0, 11, 25],
                         'nullisland': True,
                         'deprecated': True
                     }
@@ -813,9 +836,7 @@ def nearby_page():
             'centroid': True
         },
         'exclude': {
-            'placetypes': [0,
-                           11,
-                           25],
+            'placetypes': [0, 11, 25],
             'nullisland': True,
             'deprecated': True
         }
@@ -930,9 +951,7 @@ def placetypes_page():
             'centroid': True
         },
         'exclude': {
-            'placetypes': [0,
-                           11,
-                           25],
+            'placetypes': [0, 11, 25],
             'nullisland': True,
             'deprecated': True
         }
@@ -971,6 +990,10 @@ def placetype_page(placetype_name):
     """
     Placetype page handler
     """
+
+    sidebar_woeid = DEFAULT_SIDEBAR_WOEID
+    sidebar_name = DEFAULT_SIDEBAR_NAME
+    doc = {}
 
     _query, placetype = get_pt_by_name(placetype_name)
     if not placetype:
@@ -1030,9 +1053,7 @@ def random_page():
         'search': {},
         'include': {},
         'exclude': {
-            'placetypes': [0,
-                           11,
-                           25],
+            'placetypes': [0, 11, 25],
             'nullisland': True,
             'deprecated': True
         },
@@ -1056,6 +1077,10 @@ def search_page():
     """
     Search page handler
     """
+
+    sidebar_woeid = DEFAULT_SIDEBAR_WOEID
+    sidebar_name = DEFAULT_SIDEBAR_NAME
+    doc = {}
 
     q = get_str('q')
     q = get_single(q)
@@ -1112,9 +1137,7 @@ def search_page():
                         'centroid': True
                     },
                     'exclude': {
-                        'placetypes': [0,
-                                       11,
-                                       25],
+                        'placetypes': [0, 11, 25],
                         'nullisland': True,
                         'deprecated': True
                     }
@@ -1154,9 +1177,7 @@ def search_page():
             'centroid': True
         },
         'exclude': {
-            'placetypes': [0,
-                           11,
-                           25],
+            'placetypes': [0, 11, 25],
             'nullisland': True,
             'deprecated': True
         }
@@ -1690,10 +1711,8 @@ def enfilter(query, **kwargs):
     Add filters to the search query
     """
 
-    includes = kwargs.get('include',
-                          {})
-    excludes = kwargs.get('exclude',
-                          {})
+    includes = kwargs.get('include', {})
+    excludes = kwargs.get('exclude', {})
 
     must = []
     mustnot = []
@@ -1811,8 +1830,7 @@ def enfacet(**kwargs):
     """
 
     facets = {}
-    facets_param = kwargs.get('facets',
-                              {})
+    facets_param = kwargs.get('facets', {})
     if facets_param:
         placetypes = facets_param.get('placetypes', False)
         countries = facets_param.get('countries', False)
@@ -1864,12 +1882,10 @@ def inflatify(docs, **kwargs):
         if inflate_hierarchy:
             hierarchy = {}
             try:
-                source = doc.get('woe:hierarchy',
-                                 {})
+                source = doc.get('woe:hierarchy', {})
                 if source:
                     args = {
-                        'includes': ['woe:id',
-                                     'woe:name']
+                        'includes': ['woe:id', 'woe:name']
                     }
                     for placetype_name, woeid in source.items():
                         if woeid != 0:
@@ -1899,9 +1915,7 @@ def inflatify(docs, **kwargs):
             source = doc.get('woe:adjacent', [])
             if source:
                 args = {
-                    'includes': ['woe:id',
-                                 'woe:placetype_name',
-                                 'woe:name']
+                    'includes': ['woe:id', 'woe:placetype_name', 'woe:name']
                 }
                 adjs = {}
                 for woeid in source:
@@ -1938,12 +1952,10 @@ def inflatify(docs, **kwargs):
             aliases = sorted(aliases, key=lambda k: k['lang'])
 
         if inflate_children:
-            source = doc.get('woe:children',
-                             {})
+            source = doc.get('woe:children', {})
             if source:
                 args = {
-                    'includes': ['woe:id',
-                                 'woe:name']
+                    'includes': ['woe:id', 'woe:name']
                 }
                 for placetype_name, ids in source.items():
                     _query, placetype_name = get_pt_by_name(placetype_name)
@@ -2065,8 +2077,7 @@ def doc_to_geojson(doc, terse=True):
 
     props = doc
     woeid = props['woe:id']
-    geom = props.pop('geometry',
-                     {})
+    geom = props.pop('geometry', {})
     bbox = props.pop('geom:bbox', [])
     lat = props.pop('geom:latitude', 0.0)
     lon = props.pop('geom:longitude', 0.0)

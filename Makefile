@@ -52,11 +52,11 @@ SPELUNKER_DOCKERFILE := ./docker/${SPELUNKER}/Dockerfile
 HADOLINT_IMAGE := hadolint/hadolint
 
 .PHONY: lint
-lint: lint-pylint lint-flake8	## Run all linters on the code base
+lint: lint-pylint lint-flake8 lint-docker	## Run all linters on the code base
 
 .PHONY: lint-pylint
 lint-pylint:	## Run pylint on the code base
-	pylint --verbose -j 4 --reports yes --recursive yes spelunker
+	pylint --verbose -j 4 --recursive yes spelunker
 
 .PHONY: lint-flake8
 lint-flake8:	## Run flake8 on the code base

@@ -13,6 +13,7 @@ class QueryManager:
     """
     WoePlanet Elasticsearch connection and query wrangler
     """
+
     def __init__(self, **kwargs):
         self.host = kwargs.get('host')
         self.port = kwargs.get('port')
@@ -38,15 +39,12 @@ class QueryManager:
         page = self.page
         per_page = self.per_page
 
-        body = kwargs.get('body',
-                          {})
-        params = kwargs.get('params',
-                            {})
+        body = kwargs.get('body', {})
+        params = kwargs.get('params', {})
 
         if params.get('per_page', None):
             per_page = params['per_page']
-            if per_page > self.per_page_max:
-                per_page = self.per_page_max
+            per_page = min(per_page, self.per_page_max)
 
         if params.get('page', None):
             page = params['page']
@@ -161,8 +159,7 @@ class QueryManager:
             'took_sec': rsp['took'] / 1000,
             'rows': self.rows(rsp),
             'facets': rsp['aggregations'] if 'aggregations' in rsp else [],
-            'pagination': self.paginate(rsp,
-                                        **kwargs)
+            'pagination': self.paginate(rsp, **kwargs)
         }
 
     def single_rsp(self, rsp, **kwargs):
@@ -207,8 +204,7 @@ class QueryManager:
         """
 
         per_page = kwargs.get('per_page', self.per_page)
-        if per_page > self.per_page_max:
-            per_page = self.per_page_max
+        per_page = min(per_page, self.per_page_max)
 
         page = kwargs.get('page', self.page)
         hits = rsp['hits']
