@@ -3,7 +3,7 @@ services:
     extends:
       file: docker-compose.yml
       service: spelunker
-    image: spelunker:${RELEASE_TAG:-latest}
+    image: ghcr.io/woeplanet/spelunker:latest
     ports:
       - 8888:80
     restart: unless-stopped
@@ -24,7 +24,7 @@ services:
     depends_on:
       - elasticsearch
     networks:
-      - woeplanet-backend
+      - vicchi-backend
     expose:
       - 5601
     ports:
@@ -34,5 +34,5 @@ services:
       - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
 
 networks:
-  woeplanet-backend:
+  vicchi-backend:
     external: true

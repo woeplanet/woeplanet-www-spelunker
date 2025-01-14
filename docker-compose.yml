@@ -1,9 +1,8 @@
 services:
   spelunker:
     image: ghcr.io/woeplanet/spelunker:${RELEASE_TAG:-latest}
-    platform: linux/amd64
     networks:
-      - woeplanet-backend
+      - vicchi-backend
     restart: unless-stopped
     depends_on:
       - elasticsearch
@@ -21,7 +20,7 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTICSEARCH_TAG:-latest}
     networks:
-      - woeplanet-backend
+      - vicchi-backend
     expose:
       - 9200
     restart: unless-stopped
@@ -44,5 +43,5 @@ services:
       - discovery.type=single-node
 
 networks:
-  refdata-backend:
+  vicchi-backend:
     external: true
